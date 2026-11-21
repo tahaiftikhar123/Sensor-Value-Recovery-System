@@ -20,6 +20,14 @@ Open the local address shown by Streamlit, typically `http://localhost:8501`. To
 
 On macOS or Linux, use `.venv/bin/python` in the last three commands. With the virtual environment activated, the equivalent commands are `pip install -r requirements.txt`, `streamlit run app.py`, and `python -m pytest`.
 
+## Vercel deployment
+
+Import this repository as a Vercel project with the repository root as its root directory. `vercel.json` selects the Python preset and enables Fluid Compute. The Python runtime reads `asgi:app` from `pyproject.toml`. This entry point serves the same Streamlit dashboard as the local command.
+
+The Streamlit and numerical dependencies require Vercel's Large Functions support. New projects are enrolled automatically. For an existing project that reports a bundle-size error, add `VERCEL_SUPPORT_LARGE_FUNCTIONS=1` to that environment in the Vercel project's settings, then redeploy.
+
+Vercel ends WebSocket connections at the function's configured duration. Live readings are held in memory and can be lost if the browser reconnects to a different instance. Each instance also keeps its own uploaded files, charts, and downloads. Use a persistent Streamlit host if your demo needs uninterrupted sessions or reliable cross-request access to session files.
+
 ## Dataset
 
 The bundled `datasets/iiot_all_sensors_missing_values.csv` contains 1,000 time records and 1,147 missing readings (7.65% of 15,000 sensor cells). The missing readings were artificially introduced for the academic demonstration.

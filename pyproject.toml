@@ -1,0 +1,13 @@
+[project]
+name = "sensor-value-recovery-system"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "streamlit>=1.67,<2",
+    "pandas>=2.2,<4",
+    "numpy>=1.26,<3",
+    "matplotlib>=3.8,<4",
+]
+
+[tool.vercel]
+entrypoint = "asgi:app"
