@@ -12,10 +12,13 @@ MARKERS = {"Linear": "o", "Lagrange": "^"}
 
 
 def sensor_figure(
-    timestamps: pd.Series,
+    timestamps: pd.Series | np.ndarray,
     readings: np.ndarray,
     label: str,
     results: dict[str, Recovery] | None = None,
+    *,
+    numeric_axis: str | None = None,
+    show_all_gaps: bool = False,
 ) -> Figure:
     figure = Figure(figsize=(10.5, 3.2), layout="constrained", facecolor="white")
     ax = figure.subplots()
@@ -23,6 +26,9 @@ def sensor_figure(
     series = [readings, *(result.values for result in (results or {}).values())]
     peak = max(np.max(np.abs(values), where=np.isfinite(values), initial=0.0) for values in series)
     scale = 1e200 if peak > 1e200 else 1.0
+    if numeric_axis is not None and np.abs(timestamps).max() > 1e200:
+        timestamps = timestamps / 1e200
+        numeric_axis += " (×10²⁰⁰)"
     ax.plot(timestamps, readings / scale, color="#344F5D", linewidth=0.8, alpha=0.65)
     ax.scatter(timestamps[known], readings[known] / scale, color="#344F5D", s=9, label="Recorded")
     if results is None:
@@ -38,18 +44,23 @@ def sensor_figure(
                 label=f"{method} estimates", zorder=3,
             )
 
-    missing = ~known if results is None else np.logical_and.reduce(
+    missing = ~known if results is None or show_all_gaps else np.logical_and.reduce(
         [~np.isfinite(result.values) for result in results.values()]
     )
     if missing.any():
+        missing_times = timestamps[missing]
         ax.scatter(
-            timestamps[missing], np.full(missing.sum(), 0.025), transform=ax.get_xaxis_transform(),
+            missing_times, np.full(missing.sum(), 0.025), transform=ax.get_xaxis_transform(),
             color="#B45539", marker="|", s=110, label="Missing · position only", zorder=4,
         )
-    locator = mdates.AutoDateLocator(minticks=3, maxticks=7)
-    ax.xaxis.set_major_locator(locator)
-    ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
-    ax.set(xlabel="Timestamp (UTC)", ylabel=f"{label} (×10²⁰⁰)" if scale != 1 else label)
+        # Axis-relative gap markers belong in the time limits even beyond the recorded range.
+        ax.update_datalim(np.column_stack((ax.convert_xunits(missing_times), np.zeros(missing.sum()))), updatey=False)
+        ax.autoscale_view(scaley=False)
+    if numeric_axis is None:
+        locator = mdates.AutoDateLocator(minticks=3, maxticks=7)
+        ax.xaxis.set_major_locator(locator)
+        ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
+    ax.set(xlabel=numeric_axis or "Timestamp (UTC)", ylabel=f"{label} (×10²⁰⁰)" if scale != 1 else label)
     ax.grid(axis="y", color="#E1ECE8")
     ax.set_axisbelow(True)
     ax.spines[["top", "right"]].set_visible(False)

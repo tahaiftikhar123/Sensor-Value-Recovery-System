@@ -36,6 +36,14 @@ Upload a UTF-8 comma-separated file with a unique header, unique valid timestamp
 4. **Accuracy evaluation** hides approximately 10% of eligible known readings for the selected sensor using a fixed seed. The earliest and latest available readings stay visible. Both methods use the same remaining observations and are scored only on shared finite estimates.
 5. In **CSV export**, download the selected sensor or comparison results. To fill all sensors independently, choose a single method and click **Recover all sensors**. Downloads retain original row order and timestamp text, keep recorded values and metadata intact, and leave unrecoverable readings blank.
 
+## Live Sensor Reading Estimator
+
+Open **Live Sensor Reading Estimator** to work without a CSV. Choose a sensor, an interpolation method, and a time format. Enter a time and measurement with **Add Reading**, or enter just a time with **Mark Reading as Missing**. You can use decimal times or ISO date-times such as `2026-01-01 14:30`. Naive date-times use UTC. Each sensor keeps its own readings in the current browser session.
+
+For a quick demo, add 25 at time 1 and 27 at time 2, then mark time 3 missing. The gap stays pending until you add 31 at time 4. Linear Interpolation then estimates 29 at time 3. The table and graph recalculate as you add readings or change methods. **Calculate Missing Values** also runs the calculation on demand.
+
+Use **Edit readings** to correct a time or measurement, mark an entry missing, or remove it. **Download live readings CSV** exports the selected sensor's recorded and estimated values. **Reset Readings** clears the manual readings for all sensors in the session.
+
 ## Numerical methods
 
 The app sorts data chronologically and converts timestamps to elapsed hours from the earliest time. Each missing reading is estimated using original known readings from the same sensor.

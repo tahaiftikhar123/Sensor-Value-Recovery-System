@@ -260,7 +260,8 @@
 }
 
 .st-key-gap_summary, .st-key-sensor_detail, .st-key-recovery_charts,
-.st-key-accuracy_card, .st-key-sensor_export, .st-key-batch_export {
+.st-key-accuracy_card, .st-key-sensor_export, .st-key-batch_export,
+.st-key-live_controls, .st-key-live_results, .st-key-live_chart {
     background: #fff;
 }
 

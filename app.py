@@ -1,7 +1,6 @@
 """Streamlit entry point for the Sensor Data Recovery System."""
 
 from hashlib import sha256
-from io import StringIO
 from pathlib import Path
 
 import pandas as pd
@@ -20,8 +19,9 @@ from data_processing.missing_values import (
 )
 from data_processing.validation import METADATA_NAMES, TIME_NAMES, normalized, validate_data
 from evaluation.accuracy import evaluate
-from visualization.dashboard import dashboard_header, load_dashboard_style
+from visualization.dashboard import dashboard_header, download_csv, load_dashboard_style
 from visualization.graphs import sensor_figure
+from visualization.live_estimator import show_live_estimator
 
 COMPARE = "Compare both methods"
 
@@ -29,12 +29,6 @@ COMPARE = "Compare both methods"
 @st.cache_data(show_spinner=False, max_entries=5)
 def read_dataset(content: bytes) -> pd.DataFrame:
     return load_csv(content)
-
-
-def download_csv(label: str, table: pd.DataFrame, filename: str) -> None:
-    output = StringIO(newline="")
-    table.to_csv(output, index=False)
-    st.download_button(label, output.getvalue().encode("utf-8-sig"), filename, "text/csv", on_click="ignore")
 
 
 def show_evaluation(hours, readings) -> None:
@@ -65,16 +59,14 @@ def show_evaluation(hours, readings) -> None:
             st.write(f"{values.idxmin()} had the lower {metric} on the evaluated readings.")
 
 
-def main() -> None:
-    st.set_page_config(page_title="Sensor Data Recovery System", layout="wide")
-    load_dashboard_style()
+def show_dataset_recovery() -> None:
     hero = st.empty()
 
     with st.sidebar:
         st.html(
             '<div class="recovery-controls">'
             '<span class="control-mark" aria-hidden="true"><i></i><i></i><i></i></span>'
-            'Recovery controls</div>'
+            'Dataset recovery controls</div>'
         )
     source = st.sidebar.radio("Dataset", ("Sample IIoT dataset", "Upload a CSV"))
     try:
@@ -269,6 +261,16 @@ def main() -> None:
                 st.warning("Numerically invalid estimates are counted in the recovery summary.")
             st.dataframe(summary, hide_index=True)
             download_csv("Download all-sensor CSV", completed, f"{stem}_all_sensors_{all_method.lower()}.csv")
+
+
+def main() -> None:
+    st.set_page_config(page_title="Sensor Data Recovery System", layout="wide")
+    load_dashboard_style()
+    dataset_tab, live_tab = st.tabs(("Dataset Recovery", "Live Sensor Reading Estimator"))
+    with dataset_tab:
+        show_dataset_recovery()
+    with live_tab:
+        show_live_estimator()
 
 
 if __name__ == "__main__":

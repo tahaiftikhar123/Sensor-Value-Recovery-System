@@ -1,9 +1,11 @@
 """Render the dashboard header and its preview of the selected sensor."""
 
 from html import escape
+from io import StringIO
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 import streamlit as st
 
 STYLE = Path(__file__).with_name("dashboard.css")
@@ -11,6 +13,12 @@ STYLE = Path(__file__).with_name("dashboard.css")
 
 def load_dashboard_style() -> None:
     st.html(f"<style>{STYLE.read_text(encoding='utf-8')}</style>")
+
+
+def download_csv(label: str, table: pd.DataFrame, filename: str) -> None:
+    output = StringIO(newline="")
+    table.to_csv(output, index=False)
+    st.download_button(label, output.getvalue().encode("utf-8-sig"), filename, "text/csv", on_click="ignore")
 
 
 def dashboard_header(label: str = "", readings: np.ndarray | None = None) -> str:
