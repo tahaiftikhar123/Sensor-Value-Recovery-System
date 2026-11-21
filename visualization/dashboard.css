@@ -1,0 +1,322 @@
+/* Dashboard layout and motion. Streamlit handles the interactive controls. */
+.stMainBlockContainer {
+    max-width: 1440px;
+    padding-top: 4.3rem;
+    padding-bottom: 3rem;
+}
+
+[data-testid="stHeader"] {
+    background: #f1f5f4ee;
+}
+
+[data-testid="stSidebar"] [data-testid="stSidebarUserContent"] {
+    padding-top: .55rem;
+}
+
+.recovery-controls {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .25rem 0 1rem;
+    border-bottom: 1px solid #395650;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.control-mark {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid #4c7d71;
+    border-radius: .55rem;
+    background: #1e453e;
+}
+
+.control-mark i {
+    width: 3px;
+    height: 9px;
+    border-radius: 2px;
+    background: #75ebc9;
+}
+
+.control-mark i:nth-child(2) { height: 16px; }
+.control-mark i:nth-child(3) { height: 12px; }
+
+[data-testid="stSidebar"] [role="radiogroup"] {
+    gap: .3rem;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input[type="radio"]) {
+    width: 100%;
+    padding: .48rem .65rem;
+    margin: 0;
+    border: 1px solid transparent;
+    border-radius: .55rem;
+    transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input[type="radio"]):hover,
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input[type="radio"]:checked) {
+    background: #1e423a;
+    border-color: #395f54;
+}
+
+.dashboard-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(260px, .9fr);
+    align-items: center;
+    gap: clamp(1.25rem, 4vw, 4rem);
+    overflow: hidden;
+    padding: clamp(1.35rem, 3vw, 2.25rem) clamp(1.35rem, 3.25vw, 2.6rem);
+    border: 1px solid #21493e;
+    border-radius: 1.15rem;
+    background:
+        radial-gradient(ellipse at 82% 22%, #2b6b56 0%, transparent 58%),
+        linear-gradient(118deg, #0d2623 14%, #164138 100%);
+    box-shadow: 0 10px 26px #103c2526;
+    color: #effff9;
+}
+
+.dashboard-hero h1 {
+    padding: 0;
+    margin: .35rem 0 .65rem;
+    color: inherit;
+    font-size: clamp(2rem, 3.7vw, 3.5rem);
+    font-weight: 750;
+    line-height: 1.04;
+    letter-spacing: -.06em;
+}
+
+.hero-context,
+.signal-heading span:last-child {
+    margin: 0;
+    color: #a6ddcd;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: .72rem;
+    font-weight: 650;
+    letter-spacing: .08em;
+}
+
+.dashboard-hero .hero-description {
+    max-width: 27rem;
+    margin: 0;
+    color: #c4dfd7;
+    font-size: clamp(.86rem, 1.16vw, 1rem);
+    line-height: 1.45;
+}
+
+.signal-preview {
+    min-width: 0;
+    padding: .85rem .95rem .7rem;
+    border: 1px solid #5a9c8866;
+    border-radius: .85rem;
+    background: #0c2d27a8;
+}
+
+.signal-heading, .signal-legend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+}
+
+.signal-heading span:first-child {
+    overflow: hidden;
+    color: #e5fbf3;
+    font-size: .9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.signal-heading span:last-child {
+    white-space: nowrap;
+}
+
+.signal-bars {
+    display: flex;
+    align-items: end;
+    gap: 2px;
+    height: 78px;
+    margin: .6rem 0 .5rem;
+    border-bottom: 1px solid #93c7b354;
+    background: repeating-linear-gradient(to top, #93c7b325 0 1px, transparent 1px 26px);
+}
+
+.signal-bars span {
+    flex: 1;
+    min-width: 0;
+    border-radius: 2px 2px 0 0;
+    transform-origin: bottom;
+    animation: signal-reveal 480ms cubic-bezier(.2,.65,.25,1) var(--lag) both;
+}
+
+.signal-mark {
+    height: var(--level);
+    background: linear-gradient(#86f2ce, #39ad98);
+}
+
+.signal-gap {
+    height: 6px;
+    background: #ffb397;
+}
+
+.signal-legend {
+    justify-content: flex-start;
+    gap: .85rem;
+    color: #c4dfd7;
+    font-size: .72rem;
+}
+
+.signal-legend span::before {
+    display: inline-block;
+    width: .4rem;
+    height: .4rem;
+    margin-right: .3rem;
+    border-radius: 2px;
+    background: #86f2ce;
+    content: "";
+}
+
+.signal-legend span + span::before {
+    background: #ffb397;
+}
+
+.st-key-dataset_stats [data-testid="stMetric"] {
+    position: relative;
+    min-width: 0;
+    min-height: 100px;
+    padding: .85rem 1rem .8rem 1.15rem;
+    border: 1px solid #d9e4e1;
+    border-radius: .85rem;
+    background: #fff;
+    box-shadow: 0 3px 12px #153e2410;
+    transition: transform 170ms ease, box-shadow 170ms ease;
+}
+
+.st-key-dataset_stats [data-testid="stMetric"]::before {
+    position: absolute;
+    top: .95rem;
+    bottom: .95rem;
+    left: 0;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: #0c8472;
+    content: "";
+}
+
+.st-key-dataset_stats [data-testid="stColumn"]:nth-child(n+3) [data-testid="stMetric"]::before {
+    background: #c46839;
+}
+
+.st-key-dataset_stats [data-testid="stMetric"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px #153e241b;
+}
+
+[data-testid="stMetricValue"] {
+    font-variant-numeric: tabular-nums;
+    font-weight: 740;
+    letter-spacing: -.045em;
+}
+
+[data-testid="stMetricLabel"] {
+    color: #45605a;
+}
+
+[data-testid="stTabs"] [role="tablist"] {
+    gap: .3rem;
+    padding: .3rem;
+    border: 1px solid #d9e4e1;
+    border-radius: .8rem;
+    background: #e6eeeb;
+}
+
+[data-testid="stTabs"] [role="tab"] {
+    padding: .47rem .9rem;
+    border-radius: .55rem;
+    transition: background-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
+}
+
+[data-testid="stTabs"] [role="tab"]:hover {
+    background: #f1f7f4;
+}
+
+[data-testid="stTabs"] [role="tab"][aria-selected="true"] {
+    background: #fff;
+    box-shadow: 0 1px 4px #1a483226;
+}
+
+[data-testid="stTabs"] [data-baseweb="tab-highlight"],
+[data-testid="stTabs"] [data-baseweb="tab-border"] {
+    display: none;
+}
+
+[data-testid="stTabs"] [role="tabpanel"] {
+    padding-top: .35rem;
+    animation: panel-enter 280ms ease-out both;
+}
+
+.st-key-gap_summary, .st-key-sensor_detail, .st-key-recovery_charts,
+.st-key-accuracy_card, .st-key-sensor_export, .st-key-batch_export {
+    background: #fff;
+}
+
+.st-key-recovery_results {
+    padding: .85rem 1rem;
+    border: 1px solid #b6ddd2;
+    border-radius: .7rem;
+    background: #eff9f4;
+    animation: panel-enter 380ms cubic-bezier(.2,.65,.25,1) both;
+}
+
+[data-testid="stButton"] button, [data-testid="stDownloadButton"] button {
+    transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+[data-testid="stButton"] button:hover, [data-testid="stDownloadButton"] button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px #16352c22;
+}
+
+[data-testid="stButton"] button:active, [data-testid="stDownloadButton"] button:active {
+    transform: translateY(0);
+}
+
+@keyframes signal-reveal {
+    from { opacity: 0; transform: scaleY(.15); }
+    to { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes panel-enter {
+    from { opacity: .5; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1100px) {
+    .dashboard-hero { gap: 1.1rem; }
+    .hero-break { display: none; }
+}
+
+@media (max-width: 760px) {
+    .dashboard-hero { grid-template-columns: minmax(0, 1fr); }
+    .signal-bars { height: 54px; }
+    [data-testid="stTabs"] [role="tab"] { padding-inline: .55rem; }
+    .st-key-dataset_stats [data-testid="stHorizontalBlock"] {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .st-key-dataset_stats [data-testid="stColumn"] { width: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-hero *, [data-testid="stTabs"] *, [data-testid="stMetric"],
+    .st-key-recovery_results, [data-testid="stRadio"] label,
+    [data-testid="stButton"] button, [data-testid="stDownloadButton"] button {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+}
